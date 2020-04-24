@@ -17,8 +17,10 @@ end
 d = 1 # x separation
 h14 = -(d / 2) # y coordinate for vortexes 1 and 4
 h23 = d / 2 # y coordinate for vortexes 2 and 3
-s::Integer = 4 #size of vArray... for general use need to use size() to get the size
-tStep::Float16 = 0.00
+sInteger = 4 #size of vArray... for general use need to use size() to get the size
+tStep = 0.01
+currentTime = 0
+finalTime = 13
 
 
 #creating four vortex objects (x pos, y pos, x velocity, y velocity)
@@ -29,4 +31,8 @@ v4 = vortex(d, h14, 0, 4)
 
 vortexes = [v1, v2, v3, v4] #creating array of vortex objects
 
-while 
+while currentTime <= finalTime #
+    newPos!(vortexes, sInteger, tStep)
+
+
+end

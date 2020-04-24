@@ -28,16 +28,25 @@ Input:
     - vArray is the array of vortexes
     - s is the size of the array
 =#
-function newPos!(vArray, s)
-    tStep::Float16 = 0.01
+function newPos!(vArray, s, tStep)
+    #tStep::Float16 = 0.01
     affV = vArray[1]
     actV1 = vArray[2]
     actV2 = vArray[3]
     actV3 = vArray[4]
+    inducedV = []
 
+    i::Int = 2
 
+    for position in vortexes
+        Rx = vortexes[i].posx - affV.posx
+        Ry = vortexes[i].posy - affV.posy
+        posDiff = [Rx, Ry]
+        push!(inducedV, calcNewV!(posDiff))
+    end
+#=
     Rx = vortexes[4].posx - affV.posx
-    Ry = vortexes[4].posy - vortexes[1].posy
+    Ry = vortexes[4].posy - affV.posy
     inducedFromV4 = calcNewV(Rx, Ry) #induced velocity from vortex 4
     Rx = vortexes[3].posx - vortexes[1].posx
     Ry = vortexes[3].posy - vortexes[1].posy
@@ -46,19 +55,13 @@ function newPos!(vArray, s)
     Ry = vortexes[2].posy - vortexes[1].posy
     inducedFromV2 = calcNewV(Rx, Ry) #induced velocity from vortex 2
     totalInducedV = inducedFromV2 + inducedFromV3 + inducedFromV4
+=#
+    affV.velx += totalInducedV[1]
+    affV.vely += totalInducedV[2]
 
-    v1[2, 1] += totalInducedV[1]
-    v1[2, 2] += totalInducedV[2]
-
-    v1[1, 1] += v1[2, 1] * tStep
-    v1[1, 2] += v1[2, 2] * tStep
-
-    #distanceTraveled = totalInducedV * tStep
-    #println(distanceTraveled)
-
-    #v1Newx = v1[1, 1] + distanceTraveled[1]
-    #v1Newy = v2[1, 2] + distanceTraveled[2]
-    return v1
+    affV.posx += affV.posx * tStep
+    affV.posy += affV.posy * tStep
+    return vArray
 end
 
 #=
@@ -68,7 +71,7 @@ Input:
     - Rx is the x distance between the centers of the affected and acting vortexes
     - Ry is the y distance ""
 =#
-function calcNewV(Rx, Ry)
+function calcNewV!(Rx, Ry)
     r = [Rx Ry 0] #distance vector
     g = [0, 0, 1] #gamma
     crossX = -(g[3]*r[2]) #x component
@@ -77,6 +80,6 @@ function calcNewV(Rx, Ry)
     R = sqrt((r[1])^2+(r[2])^2) #magnitude of the distance vector
     inducedVx = crossX / (2*pi*(R^2))
     inducedVy = crossY / (2*pi*(R^2))
-    inducedV = [inducedVx inducedVy]
+    inducedV = [inducedVx, inducedVy]
     return inducedV
 end
