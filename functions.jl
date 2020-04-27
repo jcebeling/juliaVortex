@@ -24,49 +24,6 @@ end
 
 
 #=
-Name: newPos!
-Description: calculate new position values for the affected vortex based on the positions of the acting vortexes
-Input:
-    - vArray is the array of vortexes
-    - s is the size of the array
-=#
-function newPos!(vArray, s, tStep)
-    #tStep::Float16 = 0.01
-    affV = vArray[1]
-    actV1 = vArray[2]
-    actV2 = vArray[3]
-    actV3 = vArray[4]
-    inducedV = []
-
-    i::Int = 2
-
-    for position in vortexes
-        Rx = vortexes[i].posx - affV.posx
-        Ry = vortexes[i].posy - affV.posy
-        posDiff = [Rx, Ry]
-        push!(inducedV, calcNewV!(posDiff))
-    end
-#=
-    Rx = vortexes[4].posx - affV.posx
-    Ry = vortexes[4].posy - affV.posy
-    inducedFromV4 = calcNewV(Rx, Ry) #induced velocity from vortex 4
-    Rx = vortexes[3].posx - vortexes[1].posx
-    Ry = vortexes[3].posy - vortexes[1].posy
-    inducedFromV3 = calcNewV(Rx, Ry) #induced velocity from vortex 3
-    Rx = vortexes[2].posx - vortexes[1].posx
-    Ry = vortexes[2].posy - vortexes[1].posy
-    inducedFromV2 = calcNewV(Rx, Ry) #induced velocity from vortex 2
-    totalInducedV = inducedFromV2 + inducedFromV3 + inducedFromV4
-=#
-    affV.velx += totalInducedV[1]
-    affV.vely += totalInducedV[2]
-
-    affV.posx += affV.posx * tStep
-    affV.posy += affV.posy * tStep
-    return vArray
-end
-
-#=
 Name: calcNewV
 Description: calculates new induced vortex velocity based on relative position of another vortex
 Input:
@@ -84,4 +41,54 @@ function calcNewV!(Rx, Ry)
     inducedVy = crossY / (2*pi*(R^2))
     inducedV = [inducedVx, inducedVy]
     return inducedV
+end
+
+#=
+Name: newPos!
+Description: calculate new position values for the affected vortex based on the positions of the acting vortexes
+Input:
+    - vArray is the array of vortexes
+    - s is the size of the array
+=#
+function newPos!(vArray, s, tStep)
+    #tStep::Float16 = 0.01
+    affV = vArray[1]
+    #actV1 = vArray[2]
+    #actV2 = vArray[3]
+    #actV3 = vArray[4]
+    inducedV = []
+
+    i::Int = 2
+
+    for i in 2:4
+        Rx = vArray[i].posx - affV.posx
+        Ry = vArray[i].posy - affV.posy
+        #posDiff = [Rx, Ry]
+        push!(inducedV, calcNewV!(Rx, Ry))
+    end
+#=
+    Rx = vortexes[4].posx - affV.posx
+    Ry = vortexes[4].posy - affV.posy
+    inducedFromV4 = calcNewV(Rx, Ry) #induced velocity from vortex 4
+    Rx = vortexes[3].posx - vortexes[1].posx
+    Ry = vortexes[3].posy - vortexes[1].posy
+    inducedFromV3 = calcNewV(Rx, Ry) #induced velocity from vortex 3
+    Rx = vortexes[2].posx - vortexes[1].posx
+    Ry = vortexes[2].posy - vortexes[1].posy
+    inducedFromV2 = calcNewV(Rx, Ry) #induced velocity from vortex 2
+    totalInducedV = inducedFromV2 + inducedFromV3 + inducedFromV4
+=#
+
+    for v in inducedV
+        #affVx = inducedV[1]
+        typeof(affVx)
+        #affVy = inducedV[2]
+        x = vArray[1].posx + inducedV[1] * tStep #double indexed array
+        y = vArray[1].posy + inducedV[2] * tStep
+        nVortex = vortex(x, y, inducedV[1], inducedV[2])
+    end
+
+    #affV.posx += affV.posx * tStep
+    #affV.posy += affV.posy * tStep
+    return vArray
 end

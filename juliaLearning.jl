@@ -1,18 +1,12 @@
 #=
 Find a way to cycle through the vortex objects so that each updates each others positions
 =#
-struct vortex
-    posx::Real
-    posy::Real
-    velx::Real
-    vely::Real
-
-end
+include("customTypes.jl")
 
 d = 1 # x separation
 h14 = -(d / 2) # y coordinate for vortexes 1 and 4
 h23 = d / 2 # y coordinate for vortexes 2 and 3
-s::Integer = 4 #size of vArray... for general use need to use size() to get the size
+s = 4 #size of vArray... for general use need to use size() to get the size
 
 
 #creating four vortex objects (x pos, y pos, x velocity, y velocity)

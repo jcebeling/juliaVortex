@@ -1,4 +1,4 @@
-struct vortex # new vortex type
+mutable struct vortex # new vortex type
     posx::Real
     posy::Real
     velx::Real
