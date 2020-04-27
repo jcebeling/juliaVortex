@@ -9,6 +9,8 @@
 Name: indexShift!
 Description: cycle the given array by one so that the last entry becomes the first
 =#
+include("customTypes.jl")
+
 function indexShift!(vArray, s)
     i::Integer = 0
     for i in 1:s
