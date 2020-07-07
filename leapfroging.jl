@@ -1,6 +1,9 @@
 #=
 Initialize positions and velocities of each vortex
 d = 1 #user input distance between vortecies
+
+for the future
+make the vortecies into an array to be able to cycle through them
 =#
 include("functions.jl")
 include("customTypes.jl")
@@ -19,10 +22,10 @@ finalTime = 1
 
 
 #creating four vortex objects (x pos, y pos, x velocity, y velocity, gamma value)
-v1 = vortex(0.0023873241152614355, -0.49920421838760376, 0.23873241245746613 ,0.07957746833562851, -1)
-v2 = vortex(0.0023873241152614355, 0.49920421838760376, 0.23873241245746613, -0.07957746833562851, 1)
-v3 = vortex(1.002387285232544, 0.5007957816123962, 0.23873241245746613, 0.07957746833562851, 1)
-v4 = vortex(1.002387285232544, -0.5007957816123962, 0.23873241245746613, -0.07957746833562851, -1)
+v1 = vortex(0, h14, 0 ,0, -1)
+v2 = vortex(0, h23, 0, 0, 1)
+v3 = vortex(d, h23, 0, 0, 1)
+v4 = vortex(d, h14, 0, 0, -1)
 
 v1pxDeltaT = []
 v2pxDeltaT = []
@@ -37,7 +40,7 @@ v4pyDeltaT = []
 
 
 vortexes = [v1, v2, v3, v4] #creating array of vortex objects
-
+#I cannot change any one vortex until I have calculated the changes in the other vortexes
 
 while cTime < tStep * 4000 #
 
@@ -47,7 +50,7 @@ while cTime < tStep * 4000 #
         println("Difference is $diff")
         println("------- at cTime = $cTime --------")
 
-        cTime = tStep * 3001
+        cTime = tStep * 4001
 
         #vortexes[2].posx = vortexes[1].posx
     end
@@ -66,29 +69,21 @@ while cTime < tStep * 4000 #
 
     push!(v1pxDeltaT, vortexes[1].posx)
     push!(v1pyDeltaT, vortexes[1].posy)
-
     push!(v2pxDeltaT, vortexes[2].posx)
     push!(v2pyDeltaT, vortexes[2].posy)
-
     push!(v3pxDeltaT, vortexes[3].posx)
     push!(v3pyDeltaT, vortexes[3].posy)
-
     push!(v4pxDeltaT, vortexes[4].posx)
     push!(v4pyDeltaT, vortexes[4].posy)
 
     println(cTime)
-    #println(vortexes)
-    newPos!(vortexes, sInteger, tStep) #calculates new position and velocity of each vortex
+    println(vortexes)
+    newPos!(vortexes, sInteger, tStep) #takes the first vortex in the array and calculates new position and velocity
     global cTime += tStep
     #println(vortexes)
 end
 
-plot(v1pxDeltaT, v1pyDeltaT, c="Blue", label = "Vortex 1")
-plot!(v2pxDeltaT, v2pyDeltaT, c="Blue", label = "")
-plot!(v3pxDeltaT, v3pyDeltaT, c="Purple", label = "Vortex 2")
-plot!(v4pxDeltaT, v4pyDeltaT, c="Purple", label = "")
-
-title!("Path")
-xlabel!("X Coordinate")
-ylabel!("Y Coordinate")
-ylims!(-2, 2)
+plot(v1pxDeltaT, v1pyDeltaT)
+plot!(v2pxDeltaT, v2pyDeltaT)
+plot!(v3pxDeltaT, v3pyDeltaT)
+plot!(v4pxDeltaT, v4pyDeltaT)
