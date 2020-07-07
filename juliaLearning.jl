@@ -1,7 +1,10 @@
 #=
 Find a way to cycle through the vortex objects so that each updates each others positions
 =#
+
+#=
 include("customTypes.jl")
+include("functions.jl")
 
 d = 1 # x separation
 h14 = -(d / 2) # y coordinate for vortexes 1 and 4
@@ -27,4 +30,34 @@ for i in 1:s
     calcNewV(vortexes)
     calcNewPos(vortexes)
     indexShift!(vortexes)
+end
+
+c = 0
+while c <= 5
+    global c += 1
+    println(c)
+end
+=#
+#=n=1.234567890123456
+
+function setprecs(n, p)
+    BigFloat(n, RoundUp, precision=128)
+    i::Integer = p
+
+    println("x = ")
+    println(x)
+
+    setprecision(x, i)
+
+    println("after set precision ")
+    println(x)
+end
+
+setprecs(n, 6)
+=#
+
+for j in 1:4
+    for i in 2:4
+        println("j is $j and i is $i")
+    end
 end

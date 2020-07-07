@@ -1,6 +1,7 @@
 mutable struct vortex # new vortex type
-    posx::Real
-    posy::Real
-    velx::Real
-    vely::Real
+    posx::Float64
+    posy::Float64
+    velx::Float64
+    vely::Float64
+    gamma::Int
 end
